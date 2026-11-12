@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const articleSchema = new mongoose.Schema({
   keyword: {
@@ -25,7 +25,7 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: function (v) {
+      validator(v) {
         return /^(http|https):\/\/(www.)?(\w|\W)+/.test(v);
       },
     },
@@ -34,7 +34,7 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: function (v) {
+      validator(v) {
         return /^(http|https):\/\/(www.)?(\w|\W)+/.test(v);
       },
     },
@@ -42,8 +42,8 @@ const articleSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "User",
+    ref: 'User',
   },
 });
 
-module.exports = mongoose.model("article", articleSchema);
+module.exports = mongoose.model('article', articleSchema);

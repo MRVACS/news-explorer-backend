@@ -1,27 +1,17 @@
-const Article = require("../models/article");
+const Article = require('../models/article');
 
-const NotFoundError = require("../errors/not-found-error");
-const InvalidDataError = require("../errors/invalid-data-error");
+const NotFoundError = require('../errors/not-found-error');
+const ForbiddenError = require('../errors/forbidden-error');
 
 module.exports.getArticles = (req, res, next) => {
-  Article.find({})
-    .orFail(() => {
-      throw new NotFoundError("Error buscando artículos");
-    })
+  Article.find({ owner: req.user._id })
     .then((articles) => res.send(articles))
     .catch(next);
 };
 
 module.exports.saveArticle = (req, res, next) => {
   const {
-    keyword,
-    title,
-    text,
-    date,
-    source,
-    link,
-    image,
-    owner: ownerId,
+    keyword, title, text, date, source, link, image,
   } = req.body;
   Article.create({
     keyword,
@@ -31,7 +21,7 @@ module.exports.saveArticle = (req, res, next) => {
     source,
     link,
     image,
-    owner: req.user.id,
+    owner: req.user._id,
   })
     .then((card) => {
       res.send(card);
@@ -42,13 +32,13 @@ module.exports.saveArticle = (req, res, next) => {
 module.exports.deleteArticle = (req, res, next) => {
   Article.findById(req.params.articleId)
     .orFail(() => {
-      throw new NotFoundError("No se ha encontrado ningún artículo con ese ID");
+      throw new NotFoundError('No se ha encontrado ningún artículo con ese ID');
     })
     .then((card) => {
-      if (card.owner.toString() !== req.user.id) {
-        throw new ForbiddenError("No tienes permiso para eliminar");
+      if (card.owner.toString() !== req.user._id) {
+        throw new ForbiddenError('No tienes permiso para eliminar');
       }
-      return Article.deleteOne();
+      return card.deleteOne();
     })
     .then((card) => res.send(card))
     .catch(next);

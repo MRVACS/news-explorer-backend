@@ -1,29 +1,21 @@
-const router = require("express").Router();
-const { celebrate, Joi } = require("celebrate");
-const validateURL = require("../middlewares/url-validator");
+const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
+const validateArticle = require('../middlewares/article-validator');
 const {
   getArticles,
   deleteArticle,
   saveArticle,
-} = require("../controllers/articles");
+} = require('../controllers/articles');
 
-router.get("/", getArticles);
-router.post(
-  "/",
+router.get('/', getArticles);
+router.post('/', validateArticle, saveArticle);
+
+router.delete(
+  '/:articleId',
   celebrate({
-    body: Joi.object().keys({
-      keyword: Joi.string().required().min(2).max(30),
-      title: Joi.string().required().min(2).max(30),
-      text: Joi.string().required().min(2).max(30),
-      date: Joi.string().required().min(2).max(30),
-      source: Joi.string().required().min(2).max(30),
-      link: Joi.string().required().custom(validateURL),
-      image: Joi.string().required().custom(validateURL),
-    }),
+    params: Joi.object().keys({ articleId: Joi.string().hex().length(24) }),
   }),
-  saveArticle,
+  deleteArticle,
 );
-
-router.delete("/articleId", deleteArticle);
 
 module.exports = router;
