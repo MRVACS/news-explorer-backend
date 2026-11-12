@@ -5,6 +5,7 @@ const usersRouter = require("./routes/users");
 const articlesRouter = require("./routes/articles");
 const mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost:27017/newsexp");
+const auth = require("./middlewares/auth");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const app = express();
@@ -18,7 +19,7 @@ app.use(requestLogger);
 
 app.post("/signin", validateUser, login);
 app.post("/signup", validateUser, createUser);
-
+app.use(auth);
 app.use("/users", usersRouter);
 app.use("/articles", articlesRouter);
 

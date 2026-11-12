@@ -4,6 +4,7 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const NotFoundError = require("../errors/not-found-error");
 const InvalidDataError = require("../errors/invalid-data-error");
+const { JWT_SECRET } = require("../utils/jwt");
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
