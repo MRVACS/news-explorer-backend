@@ -21,12 +21,7 @@ app.use(express.json());
 app.use(requestLogger);
 
 app.use(router);
-/* app.post("/signin", validateUserLogin, login);
-app.post("/signup", validateUserSignup, createUser);
-app.use(auth);
-app.use("/users", usersRouter);
-app.use("/articles", articlesRouter);
- */
+
 app.use(errorLogger);
 
 app.use((req, res, next) => {

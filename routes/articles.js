@@ -6,7 +6,6 @@ const {
   deleteArticle,
   saveArticle,
 } = require('../controllers/articles');
-const { getCurrentUser } = require('../controllers/users');
 
 router.get('/', getArticles);
 router.post('/', validateArticle, saveArticle);
@@ -18,7 +17,5 @@ router.delete(
   }),
   deleteArticle,
 );
-
-router.get('/me', getCurrentUser);
 
 module.exports = router;
