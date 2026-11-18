@@ -14,7 +14,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 app.use(helmet());
-
+app.set('trust proxy', 1); // trust first proxy
 app.use(limiter);
 app.use(express.json());
 
