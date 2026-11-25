@@ -13,14 +13,10 @@ mongoose.connect(MONGO_URL);
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
-app.use(helmet());
-app.set('trust proxy', 1); // trust first proxy
-app.use(limiter);
-app.use(express.json());
 
 const allowedOrigins = new Set([
   'http://localhost:3001', // frontend durante desarrollo
-  'https://mrvacs.github.io/news-explorer-frontend/', // frontend en producción
+  'https://mrvacs.github.io', // frontend en producción
 ]);
 
 const corsOptions = {
@@ -36,6 +32,12 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
+app.use(helmet());
+app.set('trust proxy', 1); // trust first proxy
+app.use(limiter);
+app.use(express.json());
 
 app.use(requestLogger);
 
