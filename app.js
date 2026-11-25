@@ -33,7 +33,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
 
 app.use(helmet());
 app.set('trust proxy', 1); // trust first proxy
