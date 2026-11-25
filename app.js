@@ -18,6 +18,25 @@ app.set('trust proxy', 1); // trust first proxy
 app.use(limiter);
 app.use(express.json());
 
+const allowedOrigins = new Set([
+  'http://localhost:3001', // frontend durante desarrollo
+  'https://mrvacs.github.io/news-explorer-frontend/', // frontend en producción
+]);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.has(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
+
 app.use(requestLogger);
 
 app.use(router);
